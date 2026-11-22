@@ -1,0 +1,4095 @@
+{
+  "experiment": "ClinRAG-Guard Compliance Monitoring",
+  "timestamp": "2026-10-19T14:44:19.927838",
+  "research_question": "Can automated compliance monitoring of clinical RAG knowledge bases detect integrity failures that map to specific EU AI Act Article 10 requirements, and does this detection generalise across retrieval architectures?",
+  "pipelines": [
+    "LangChainChromaMiniLM",
+    "LlamaIndexFAISSMiniLM",
+    "LangChainChromaPubMedBERT"
+  ],
+  "queries": [
+    "What is the recommended first-line treatment for hypertension?",
+    "What are the drug interactions between warfarin and NSAIDs?",
+    "What is the correct dose of aspirin for secondary prevention?",
+    "What is the ALS algorithm for cardiac arrest management?",
+    "What is the recommended HbA1c target for type 2 diabetes?"
+  ],
+  "results": [
+    {
+      "pipeline": "LangChain + ChromaDB + MiniLM-L6-v2",
+      "corpus": "clean",
+      "num_documents": 5,
+      "elapsed_seconds": 0.58,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.5255,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.334,
+            "rank": 2
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.3337,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.298,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.2109,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.6724,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.3894,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3126,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.111,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.0633,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.7069,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4033,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.3211,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.289,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.2608,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.5657,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.1776,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.1682,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.1202,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.0444,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4598,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.3447,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.2297,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.1984,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.1743,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 580,
+              "next_review_date": "2025-03-18",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 3,
+              "explanation": "Document review date (2025-03-18) is 580 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.OVERDUE",
+              "days_overdue": 171,
+              "next_review_date": "2026-05-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 1,
+              "explanation": "Document review date (2026-05-01) is 171 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "scope": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 0,
+              "explanation": "1 weakened action(s): 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "chss_level": "CHSSLevel.INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "COMPLIANT",
+          "chss_score": 0,
+          "explanation": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "level": "INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      }
+    },
+    {
+      "pipeline": "LangChain + ChromaDB + MiniLM-L6-v2",
+      "corpus": "contaminated",
+      "num_documents": 5,
+      "elapsed_seconds": 0.59,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.5477,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.334,
+            "rank": 2
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.3149,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.2867,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.2109,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.6724,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.3894,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3176,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.0671,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.0523,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.7069,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3946,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.3211,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.2622,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.2549,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.586,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.1685,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.1682,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.1144,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.0444,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4615,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.3393,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.2297,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.185,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.1743,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 2,
+          "alerts": [
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-002",
+              "matched_text": "eGFR below 15 mL/min",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-002: Fabricated study claiming metformin is safe down to eGFR 15. BNF contraindication threshold remains eGFR 30 based on established pharmacokinetic evidence of metformin accumulation.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-001",
+              "matched_text": "safe in combination with warfarin when co-prescribed with omeprazole",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-001: Fabricated study claiming naproxen is safe with warfarin when co-prescribed with omeprazole. No such study exists in the European Journal of Clinical Pharmacology.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            }
+          ]
+        },
+        "scope": {
+          "alert_count": 1,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "ScopeStatus.SCOPE_INSUFFICIENT",
+              "document_domain": "pharmacology",
+              "document_scope": [
+                "aspirin",
+                "antiplatelet",
+                "cardiovascular-prevention",
+                "analgesic",
+                "NSAID"
+              ],
+              "query_domain": "cardiology",
+              "query_text": "management of acute coronary syndrome",
+              "severity": 2,
+              "explanation": "Document domain 'pharmacology' has clinical overlap with query domain 'cardiology', but document scope '['aspirin', 'antiplatelet', 'cardiovascular-prevention', 'analgesic', 'NSAID']' may be insufficient for the query context: 'management of acute coronary syndrome'. Document may provide partial but incomplete guidance.",
+              "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+            }
+          ]
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "chss_level": "CHSSLevel.MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected",
+          "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "article": "Article 10",
+          "sub_article": "Art.10(5)",
+          "requirement_text": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "compliance_status": "MINOR_NON_COMPLIANCE",
+          "chss_score": 2,
+          "explanation": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "level": "MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      }
+    },
+    {
+      "pipeline": "LlamaIndex + FAISS + MiniLM-L6-v2",
+      "corpus": "clean",
+      "num_documents": 5,
+      "elapsed_seconds": 0.53,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.5255,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.334,
+            "rank": 2
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.3337,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.298,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.2109,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.6724,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.3894,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3126,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.111,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.0633,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.7069,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4033,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.3211,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.289,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.2608,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.5657,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.1776,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.1682,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.1202,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.0444,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4598,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.3447,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.2297,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.1984,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.1743,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 580,
+              "next_review_date": "2025-03-18",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 3,
+              "explanation": "Document review date (2025-03-18) is 580 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.OVERDUE",
+              "days_overdue": 171,
+              "next_review_date": "2026-05-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 1,
+              "explanation": "Document review date (2026-05-01) is 171 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "scope": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 0,
+              "explanation": "1 weakened action(s): 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "chss_level": "CHSSLevel.INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "COMPLIANT",
+          "chss_score": 0,
+          "explanation": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "level": "INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      }
+    },
+    {
+      "pipeline": "LlamaIndex + FAISS + MiniLM-L6-v2",
+      "corpus": "contaminated",
+      "num_documents": 5,
+      "elapsed_seconds": 0.5,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.5477,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.334,
+            "rank": 2
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.3149,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.2867,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.2109,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.6724,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.3894,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3176,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.0671,
+            "rank": 4
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.0523,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.7069,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.3946,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.3211,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.2622,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.2549,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.586,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.1685,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.1682,
+            "rank": 3
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.1144,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.0444,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.4615,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.3393,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.2297,
+            "rank": 3
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.185,
+            "rank": 4
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.1743,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 2,
+          "alerts": [
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-002",
+              "matched_text": "eGFR below 15 mL/min",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-002: Fabricated study claiming metformin is safe down to eGFR 15. BNF contraindication threshold remains eGFR 30 based on established pharmacokinetic evidence of metformin accumulation.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-001",
+              "matched_text": "safe in combination with warfarin when co-prescribed with omeprazole",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-001: Fabricated study claiming naproxen is safe with warfarin when co-prescribed with omeprazole. No such study exists in the European Journal of Clinical Pharmacology.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            }
+          ]
+        },
+        "scope": {
+          "alert_count": 1,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "ScopeStatus.SCOPE_INSUFFICIENT",
+              "document_domain": "pharmacology",
+              "document_scope": [
+                "aspirin",
+                "antiplatelet",
+                "cardiovascular-prevention",
+                "analgesic",
+                "NSAID"
+              ],
+              "query_domain": "cardiology",
+              "query_text": "management of acute coronary syndrome",
+              "severity": 2,
+              "explanation": "Document domain 'pharmacology' has clinical overlap with query domain 'cardiology', but document scope '['aspirin', 'antiplatelet', 'cardiovascular-prevention', 'analgesic', 'NSAID']' may be insufficient for the query context: 'management of acute coronary syndrome'. Document may provide partial but incomplete guidance.",
+              "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+            }
+          ]
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "chss_level": "CHSSLevel.MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected",
+          "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "article": "Article 10",
+          "sub_article": "Art.10(5)",
+          "requirement_text": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "compliance_status": "MINOR_NON_COMPLIANCE",
+          "chss_score": 2,
+          "explanation": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "level": "MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      }
+    },
+    {
+      "pipeline": "LangChain + ChromaDB + PubMedBERT",
+      "corpus": "clean",
+      "num_documents": 5,
+      "elapsed_seconds": 6.62,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.903,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.8522,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8385,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8337,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.7929,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9466,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.9094,
+            "rank": 2
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.9018,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.9001,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8652,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9278,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.8743,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8708,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.863,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8258,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9306,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.9015,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.9002,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8972,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8827,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9026,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.8534,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8393,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8353,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.7934,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 580,
+              "next_review_date": "2025-03-18",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 3,
+              "explanation": "Document review date (2025-03-18) is 580 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.OVERDUE",
+              "days_overdue": 171,
+              "next_review_date": "2026-05-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 1,
+              "explanation": "Document review date (2026-05-01) is 171 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "scope": {
+          "alert_count": 0,
+          "alerts": []
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 0,
+              "explanation": "1 weakened action(s): 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "chss_level": "CHSSLevel.INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "COMPLIANT",
+          "chss_score": 0,
+          "explanation": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 3,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 3 from temporal monitor (weight 1.0) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from temporal monitor (weight 1.0) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 0,
+          "chss_score": 0,
+          "level": "INFORMATIONAL",
+          "justification": "Raw severity 0 from diagnostic monitor (weight 1.3) -> CHSS 0: Informational -- no clinical impact expected"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      }
+    },
+    {
+      "pipeline": "LangChain + ChromaDB + PubMedBERT",
+      "corpus": "contaminated",
+      "num_documents": 5,
+      "elapsed_seconds": 6.0,
+      "retrieval": {
+        "What is the recommended first-line treatment for hypertension?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.903,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.8528,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8407,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8302,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.7937,
+            "rank": 5
+          }
+        ],
+        "What are the drug interactions between warfarin and NSAIDs?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9466,
+            "rank": 1
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.9107,
+            "rank": 2
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.9028,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.897,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8659,
+            "rank": 5
+          }
+        ],
+        "What is the correct dose of aspirin for secondary prevention?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9278,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.875,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8726,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8599,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8268,
+            "rank": 5
+          }
+        ],
+        "What is the ALS algorithm for cardiac arrest management?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9306,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.9024,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.9009,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8956,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.8832,
+            "rank": 5
+          }
+        ],
+        "What is the recommended HbA1c target for type 2 diabetes?": [
+          {
+            "doc_id": "BNF-ASPIRIN-2024",
+            "score": 0.9026,
+            "rank": 1
+          },
+          {
+            "doc_id": "NICE-NG136-HYPERTENSION-2022",
+            "score": 0.8537,
+            "rank": 2
+          },
+          {
+            "doc_id": "BNF-WARFARIN-NSAID-2024",
+            "score": 0.8413,
+            "rank": 3
+          },
+          {
+            "doc_id": "BNF-METFORMIN-2024",
+            "score": 0.8325,
+            "rank": 4
+          },
+          {
+            "doc_id": "RCUK-ALS-2021",
+            "score": 0.7938,
+            "rank": 5
+          }
+        ]
+      },
+      "monitors": {
+        "temporal": {
+          "alert_count": 5,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 778,
+              "next_review_date": "2024-09-01",
+              "publication_date": "2024-03-01",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-09-01) is 778 days past due | Source BNF has a 12-month review cycle; document published 2024-03-01 is 31 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 826,
+              "next_review_date": "2024-07-15",
+              "publication_date": "2024-01-15",
+              "source_review_cycle_months": 12,
+              "severity": 4,
+              "explanation": "Document review date (2024-07-15) is 826 days past due | Source BNF has a 12-month review cycle; document published 2024-01-15 is 33 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2022-03-18",
+              "source_review_cycle_months": 36,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source NICE has a 36-month review cycle; document published 2022-03-18 is 55 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            },
+            {
+              "doc_id": "RCUK-ALS-2021",
+              "status": "TemporalStatus.CRITICALLY_OVERDUE",
+              "days_overdue": 1966,
+              "next_review_date": "2021-06-01",
+              "publication_date": "2021-05-01",
+              "source_review_cycle_months": 60,
+              "severity": 4,
+              "explanation": "Document review date (2021-06-01) is 1966 days past due | Source RCUK has a 60-month review cycle; document published 2021-05-01 is 65 months old",
+              "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+            }
+          ]
+        },
+        "retraction": {
+          "alert_count": 2,
+          "alerts": [
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-002",
+              "matched_text": "eGFR below 15 mL/min",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-002: Fabricated study claiming metformin is safe down to eGFR 15. BNF contraindication threshold remains eGFR 30 based on established pharmacokinetic evidence of metformin accumulation.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "RetractionStatus.RETRACTED_MATCH",
+              "matched_watchlist_id": "RW-2024-001",
+              "matched_text": "safe in combination with warfarin when co-prescribed with omeprazole",
+              "severity": 4,
+              "explanation": "Document contains text matching retraction watchlist entry RW-2024-001: Fabricated study claiming naproxen is safe with warfarin when co-prescribed with omeprazole. No such study exists in the European Journal of Clinical Pharmacology.",
+              "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+            }
+          ]
+        },
+        "scope": {
+          "alert_count": 1,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "ScopeStatus.SCOPE_INSUFFICIENT",
+              "document_domain": "pharmacology",
+              "document_scope": [
+                "aspirin",
+                "antiplatelet",
+                "cardiovascular-prevention",
+                "analgesic",
+                "NSAID"
+              ],
+              "query_domain": "cardiology",
+              "query_text": "management of acute coronary syndrome",
+              "severity": 2,
+              "explanation": "Document domain 'pharmacology' has clinical overlap with query domain 'cardiology', but document scope '['aspirin', 'antiplatelet', 'cardiovascular-prevention', 'analgesic', 'NSAID']' may be insufficient for the query context: 'management of acute coronary syndrome'. Document may provide partial but incomplete guidance.",
+              "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+            }
+          ]
+        },
+        "diagnostic": {
+          "alert_count": 4,
+          "alerts": [
+            {
+              "doc_id": "BNF-ASPIRIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'should'",
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'should'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 2,
+              "explanation": "4 weakened action(s): 'must' may have been weakened to 'should'; 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'should'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-METFORMIN-2024",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "BNF-WARFARIN-NSAID-2024",
+              "status": "DiagnosticStatus.MILD_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "2 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            },
+            {
+              "doc_id": "NICE-NG136-HYPERTENSION-2022",
+              "status": "DiagnosticStatus.MODERATE_AMBIGUITY",
+              "hedging_count": 0,
+              "weakened_actions": [
+                "'must' may have been weakened to 'may'",
+                "'shall' may have been weakened to 'may'",
+                "'immediately' may have been weakened to 'consider'"
+              ],
+              "removed_specifics": [],
+              "severity": 1,
+              "explanation": "3 weakened action(s): 'must' may have been weakened to 'may'; 'shall' may have been weakened to 'may'; 'immediately' may have been weakened to 'consider'",
+              "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+            }
+          ]
+        },
+        "provenance": {
+          "alert_count": 0,
+          "alerts": []
+        }
+      },
+      "chss_results": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "MHRA 2026 AI lifecycle framework: continuous data quality monitoring; EU AI Act Article 10(3): data relevance assessment for high-risk systems"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "chss_level": "CHSSLevel.CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon",
+          "regulatory_reference": "EU AI Act Article 10(3): data preparation operations including cleaning and updating; retracted evidence must be removed from high-risk AI training data"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "chss_level": "CHSSLevel.MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected",
+          "regulatory_reference": "EU AI Act Article 10(5): training data relevance in view of intended purpose of the high-risk AI system"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "chss_level": "CHSSLevel.HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "chss_level": "CHSSLevel.LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk",
+          "regulatory_reference": "EU AI Act Article 10(4): training data shall be appropriate in view of the intended purpose of the high-risk AI system; diagnostic ambiguity in clinical decision-support data may compromise the safety requirements of Article 9"
+        }
+      ],
+      "regulatory_mappings": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor_type": "temporal",
+          "article": "Article 10",
+          "sub_article": "Art.10(2)",
+          "requirement_text": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "retraction",
+          "article": "Article 10",
+          "sub_article": "Art.10(3)",
+          "requirement_text": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "compliance_status": "CRITICAL_NON_COMPLIANCE",
+          "chss_score": 4,
+          "explanation": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "scope",
+          "article": "Article 10",
+          "sub_article": "Art.10(5)",
+          "requirement_text": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "compliance_status": "MINOR_NON_COMPLIANCE",
+          "chss_score": 2,
+          "explanation": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "MAJOR_NON_COMPLIANCE",
+          "chss_score": 3,
+          "explanation": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor_type": "diagnostic",
+          "article": "Article 10",
+          "sub_article": "Art.10(4)",
+          "requirement_text": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "compliance_status": "OBSERVATION",
+          "chss_score": 1,
+          "explanation": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "chss_summary": [
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "RCUK-ALS-2021",
+          "monitor": "temporal",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from temporal monitor (weight 1.0) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "retraction",
+          "raw_severity": 4,
+          "chss_score": 4,
+          "level": "CRITICAL",
+          "justification": "Raw severity 4 from retraction monitor (weight 1.2) -> CHSS 4: Critical -- immediate danger to life if acted upon"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "scope",
+          "raw_severity": 2,
+          "chss_score": 2,
+          "level": "MODERATE",
+          "justification": "Raw severity 2 from scope monitor (weight 1.1) -> CHSS 2: Moderate -- could cause suboptimal care if undetected"
+        },
+        {
+          "doc_id": "BNF-ASPIRIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 2,
+          "chss_score": 3,
+          "level": "HIGH",
+          "justification": "Raw severity 2 from diagnostic monitor (weight 1.3) -> CHSS 3: High -- could cause significant patient harm"
+        },
+        {
+          "doc_id": "BNF-METFORMIN-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "BNF-WARFARIN-NSAID-2024",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        },
+        {
+          "doc_id": "NICE-NG136-HYPERTENSION-2022",
+          "monitor": "diagnostic",
+          "raw_severity": 1,
+          "chss_score": 1,
+          "level": "LOW",
+          "justification": "Raw severity 1 from diagnostic monitor (weight 1.3) -> CHSS 1: Low -- minor documentation issue, no direct patient risk"
+        }
+      ],
+      "compliance_summary": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      }
+    }
+  ],
+  "comparison": {
+    "detection_rates": {
+      "LangChain + ChromaDB + MiniLM-L6-v2 (clean)": {
+        "temporal": 5,
+        "retraction": 0,
+        "scope": 0,
+        "diagnostic": 4,
+        "provenance": 0
+      },
+      "LangChain + ChromaDB + MiniLM-L6-v2 (contaminated)": {
+        "temporal": 5,
+        "retraction": 2,
+        "scope": 1,
+        "diagnostic": 4,
+        "provenance": 0
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (clean)": {
+        "temporal": 5,
+        "retraction": 0,
+        "scope": 0,
+        "diagnostic": 4,
+        "provenance": 0
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (contaminated)": {
+        "temporal": 5,
+        "retraction": 2,
+        "scope": 1,
+        "diagnostic": 4,
+        "provenance": 0
+      },
+      "LangChain + ChromaDB + PubMedBERT (clean)": {
+        "temporal": 5,
+        "retraction": 0,
+        "scope": 0,
+        "diagnostic": 4,
+        "provenance": 0
+      },
+      "LangChain + ChromaDB + PubMedBERT (contaminated)": {
+        "temporal": 5,
+        "retraction": 2,
+        "scope": 1,
+        "diagnostic": 4,
+        "provenance": 0
+      }
+    },
+    "chss_distribution": {
+      "LangChain + ChromaDB + MiniLM-L6-v2 (clean)": {
+        "0": 1,
+        "1": 3,
+        "2": 0,
+        "3": 2,
+        "4": 3
+      },
+      "LangChain + ChromaDB + MiniLM-L6-v2 (contaminated)": {
+        "0": 0,
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 7
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (clean)": {
+        "0": 1,
+        "1": 3,
+        "2": 0,
+        "3": 2,
+        "4": 3
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (contaminated)": {
+        "0": 0,
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 7
+      },
+      "LangChain + ChromaDB + PubMedBERT (clean)": {
+        "0": 1,
+        "1": 3,
+        "2": 0,
+        "3": 2,
+        "4": 3
+      },
+      "LangChain + ChromaDB + PubMedBERT (contaminated)": {
+        "0": 0,
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 7
+      }
+    },
+    "compliance_status": {
+      "LangChain + ChromaDB + MiniLM-L6-v2 (clean)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      },
+      "LangChain + ChromaDB + MiniLM-L6-v2 (contaminated)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (clean)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      },
+      "LlamaIndex + FAISS + MiniLM-L6-v2 (contaminated)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      },
+      "LangChain + ChromaDB + PubMedBERT (clean)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        }
+      },
+      "LangChain + ChromaDB + PubMedBERT (contaminated)": {
+        "Art.10(2)": {
+          "sub_article": "Art.10(2)",
+          "requirement": "Data governance and management practices shall ensure that training data is relevant, representative, and kept up to date.",
+          "findings": 5,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022",
+            "RCUK-ALS-2021"
+          ]
+        },
+        "Art.10(3)": {
+          "sub_article": "Art.10(3)",
+          "requirement": "Training, validation and testing data sets shall be relevant, sufficiently representative, and to the best extent possible, free of errors and complete in view of the intended purpose.",
+          "findings": 2,
+          "max_chss": 4,
+          "worst_status": "CRITICAL_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024"
+          ]
+        },
+        "Art.10(5)": {
+          "sub_article": "Art.10(5)",
+          "requirement": "To the extent that it is strictly necessary for the purpose of ensuring bias detection and correction, providers may process special categories of personal data subject to appropriate safeguards.",
+          "findings": 1,
+          "max_chss": 2,
+          "worst_status": "MINOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024"
+          ]
+        },
+        "Art.10(4)": {
+          "sub_article": "Art.10(4)",
+          "requirement": "Training data shall take into account the specific geographical, contextual, behavioural or functional setting within which the high-risk AI system is intended to be used, and shall be appropriate in view of the intended purpose.",
+          "findings": 4,
+          "max_chss": 3,
+          "worst_status": "MAJOR_NON_COMPLIANCE",
+          "affected_docs": [
+            "BNF-ASPIRIN-2024",
+            "BNF-METFORMIN-2024",
+            "BNF-WARFARIN-NSAID-2024",
+            "NICE-NG136-HYPERTENSION-2022"
+          ]
+        }
+      }
+    }
+  }
+}

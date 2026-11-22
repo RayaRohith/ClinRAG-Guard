@@ -1,0 +1,53 @@
+{
+  "arm": 2,
+  "total_documents": 200,
+  "total_positives": 100,
+  "source_counts": {
+    "version_api": 200,
+    "date_recency": 0,
+    "text_diff": 100,
+    "combined_union": 200,
+    "combined_intersection": 0
+  },
+  "pairwise_overlap": {
+    "combined_intersection+combined_union": 0,
+    "combined_intersection+date_recency": 0,
+    "combined_intersection+text_diff": 0,
+    "combined_intersection+version_api": 0,
+    "combined_union+date_recency": 0,
+    "combined_union+text_diff": 100,
+    "combined_union+version_api": 200,
+    "date_recency+text_diff": 0,
+    "date_recency+version_api": 0,
+    "text_diff+version_api": 100
+  },
+  "all_sources_overlap": 0,
+  "by_n_sources": {
+    "2": 100,
+    "3": 100
+  },
+  "unflagged_positives_count": 0,
+  "unflagged_positives": [],
+  "unique_flags": {
+    "combined_intersection": {
+      "count": 0,
+      "doc_ids": []
+    },
+    "combined_union": {
+      "count": 0,
+      "doc_ids": []
+    },
+    "date_recency": {
+      "count": 0,
+      "doc_ids": []
+    },
+    "text_diff": {
+      "count": 0,
+      "doc_ids": []
+    },
+    "version_api": {
+      "count": 0,
+      "doc_ids": []
+    }
+  }
+}

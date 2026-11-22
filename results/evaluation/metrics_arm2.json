@@ -1,0 +1,130 @@
+{
+  "confidence_level": 0.95,
+  "sources": [
+    {
+      "source_name": "version_api",
+      "confusion_matrix": {
+        "tp": 100,
+        "fp": 100,
+        "tn": 0,
+        "fn": 0,
+        "total": 200
+      },
+      "precision": {
+        "value": 0.5,
+        "lower": 0.4313596220903452,
+        "upper": 0.5686403779096548,
+        "n": 200
+      },
+      "recall": {
+        "value": 1.0,
+        "lower": 0.963005192523998,
+        "upper": 0.9999999999999998,
+        "n": 100
+      },
+      "f1": 0.6666666666666666,
+      "f1_lower": 0.5958290851352049,
+      "f1_upper": 0.7250105070831033
+    },
+    {
+      "source_name": "date_recency",
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 100,
+        "fn": 100,
+        "total": 200
+      },
+      "precision": {
+        "value": 0.0,
+        "lower": 0.0,
+        "upper": 0.0,
+        "n": 0
+      },
+      "recall": {
+        "value": 0.0,
+        "lower": 0.0,
+        "upper": 0.03699480747600191,
+        "n": 100
+      },
+      "f1": 0.0,
+      "f1_lower": 0.0,
+      "f1_upper": 0.0
+    },
+    {
+      "source_name": "text_diff",
+      "confusion_matrix": {
+        "tp": 100,
+        "fp": 0,
+        "tn": 100,
+        "fn": 0,
+        "total": 200
+      },
+      "precision": {
+        "value": 1.0,
+        "lower": 0.963005192523998,
+        "upper": 0.9999999999999998,
+        "n": 100
+      },
+      "recall": {
+        "value": 1.0,
+        "lower": 0.963005192523998,
+        "upper": 0.9999999999999998,
+        "n": 100
+      },
+      "f1": 1.0,
+      "f1_lower": 0.963005192523998,
+      "f1_upper": 0.9999999999999998
+    },
+    {
+      "source_name": "combined_union",
+      "confusion_matrix": {
+        "tp": 100,
+        "fp": 100,
+        "tn": 0,
+        "fn": 0,
+        "total": 200
+      },
+      "precision": {
+        "value": 0.5,
+        "lower": 0.4313596220903452,
+        "upper": 0.5686403779096548,
+        "n": 200
+      },
+      "recall": {
+        "value": 1.0,
+        "lower": 0.963005192523998,
+        "upper": 0.9999999999999998,
+        "n": 100
+      },
+      "f1": 0.6666666666666666,
+      "f1_lower": 0.5958290851352049,
+      "f1_upper": 0.7250105070831033
+    },
+    {
+      "source_name": "combined_intersection",
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 100,
+        "fn": 100,
+        "total": 200
+      },
+      "precision": {
+        "value": 0.0,
+        "lower": 0.0,
+        "upper": 0.0,
+        "n": 0
+      },
+      "recall": {
+        "value": 0.0,
+        "lower": 0.0,
+        "upper": 0.03699480747600191,
+        "n": 100
+      },
+      "f1": 0.0,
+      "f1_lower": 0.0,
+      "f1_upper": 0.0
+    }
+  ]
+}
