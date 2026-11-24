@@ -24,6 +24,8 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from difflib import SequenceMatcher
 from pathlib import Path
+
+from src.utils.config import to_relative, resolve_path
 from typing import Optional
 from xml.etree import ElementTree as ET
 
@@ -486,7 +488,12 @@ class DailyMedVersionCollector:
             "collected_at": datetime.now().isoformat(),
             "n_pairs": len(pairs),
             "change_sections_checked": DAILYMED_CHANGE_SECTIONS,
-            "pairs": [asdict(p) for p in pairs],
+            "pairs": [
+                {**asdict(p),
+                 "older_path": to_relative(p.older_path),
+                 "newer_path": to_relative(p.newer_path)}
+                for p in pairs
+            ],
         }
 
         out_path = MANIFEST_DIR / "dailymed_pairs.json"

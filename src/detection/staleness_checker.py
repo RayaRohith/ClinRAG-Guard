@@ -19,6 +19,8 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
+
+from src.utils.config import to_relative, resolve_path
 from typing import Optional
 
 import requests
@@ -223,7 +225,7 @@ class StalenessChecker:
         document it indexed and its set ID. It never reads the doc_id, file name
         or ground-truth label to decide.
         """
-        indexed = Path(indexed_xml_path)
+        indexed = resolve_path(indexed_xml_path)
         if not indexed.exists():
             return StalenessResult(
                 doc_id=doc_id, set_id=set_id, flagged=False,
