@@ -328,6 +328,25 @@ class DailyMedVersionCollector:
                 texts.append(child.tail)
         return " ".join(texts)
 
+    # ── Step 5b: Read version and date from the label itself ──
+
+    @staticmethod
+    def read_spl_metadata(xml_path: Path) -> tuple[int, str]:
+        """
+        Read a label's own version number and effective date from its SPL XML.
+
+        These fields are authoritative. The DailyMed web page scraped in
+        get_archive_ids() does not reliably expose them, so ordering by the
+        scraped values is unsafe. Returns (version, "YYYY-MM-DD"), or (0, "")
+        if a field is missing.
+        """
+        text = Path(xml_path).read_text(encoding="utf-8", errors="ignore")
+        v = re.search(r'<versionNumber\s+value="(\d+)"', text)
+        d = re.search(r'<effectiveTime\s+value="(\d{4})(\d{2})(\d{2})', text)
+        version = int(v.group(1)) if v else 0
+        date = f"{d.group(1)}-{d.group(2)}-{d.group(3)}" if d else ""
+        return version, date
+
     # ── Step 6: Compare versions for substantive changes ──────
 
     def compare_versions(
@@ -396,23 +415,32 @@ class DailyMedVersionCollector:
                 logger.debug(f"  {set_id}: only {len(archives)} archive entries, skipping")
                 continue
 
-            oldest = archives[0]
-            newest = archives[-1]
+            first, last = archives[0], archives[-1]
 
-            older_path = self.download_archive_xml(
-                oldest["archive_id"],
-                f"{set_id}_v{oldest['version']}_old",
+            path_a = self.download_archive_xml(
+                first["archive_id"], f"{set_id}_a{first['archive_id']}",
             )
-            newer_path = self.download_archive_xml(
-                newest["archive_id"],
-                f"{set_id}_v{newest['version']}_new",
+            path_b = self.download_archive_xml(
+                last["archive_id"], f"{set_id}_a{last['archive_id']}",
             )
-
-            if not older_path or not newer_path:
+            if not path_a or not path_b:
                 continue
 
-            older_sections = self.extract_sections(older_path)
-            newer_sections = self.extract_sections(newer_path)
+            # Order by each label's own version and date, never by page order.
+            meta_a = self.read_spl_metadata(path_a)
+            meta_b = self.read_spl_metadata(path_b)
+            if meta_a == meta_b:
+                logger.debug(f"  {set_id}: archives share version {meta_a}, skipping")
+                continue
+            if meta_a < meta_b:
+                old_arc, old_path, (old_ver, old_date) = first, path_a, meta_a
+                new_arc, new_path, (new_ver, new_date) = last, path_b, meta_b
+            else:
+                old_arc, old_path, (old_ver, old_date) = last, path_b, meta_b
+                new_arc, new_path, (new_ver, new_date) = first, path_a, meta_a
+
+            older_sections = self.extract_sections(old_path)
+            newer_sections = self.extract_sections(new_path)
 
             if not older_sections and not newer_sections:
                 logger.debug(f"  {set_id}: no clinical sections extracted")
@@ -422,26 +450,26 @@ class DailyMedVersionCollector:
 
             if changed:
                 pair = DrugLabelPair(
-                    pair_id=f"DM-{set_id}-v{oldest['version']}-v{newest['version']}",
+                    pair_id=f"DM-{set_id}-v{old_ver}-v{new_ver}",
                     drug_name=entry.get("drug_name", "Unknown"),
                     set_id=set_id,
-                    older_spl_id=oldest["archive_id"],
-                    older_version=oldest["version"],
-                    older_date=oldest["date"],
-                    older_path=str(older_path),
-                    older_hash=self._file_hash(older_path),
-                    newer_spl_id=newest["archive_id"],
-                    newer_version=newest["version"],
-                    newer_date=newest["date"],
-                    newer_path=str(newer_path),
-                    newer_hash=self._file_hash(newer_path),
+                    older_spl_id=old_arc["archive_id"],
+                    older_version=old_ver,
+                    older_date=old_date,
+                    older_path=str(old_path),
+                    older_hash=self._file_hash(old_path),
+                    newer_spl_id=new_arc["archive_id"],
+                    newer_version=new_ver,
+                    newer_date=new_date,
+                    newer_path=str(new_path),
+                    newer_hash=self._file_hash(new_path),
                     changed_sections=changed,
                     change_summary=summary,
                 )
                 pairs.append(pair)
                 logger.info(
                     f"  PAIR #{len(pairs)}: {entry['drug_name'][:50]} "
-                    f"v{oldest['version']}→v{newest['version']} | {summary}"
+                    f"v{old_ver} ({old_date}) → v{new_ver} ({new_date}) | {summary}"
                 )
 
         logger.info(f"Found {len(pairs)} drug label pairs with substantive changes")
