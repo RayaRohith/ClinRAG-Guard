@@ -87,10 +87,14 @@ def main():
             "source": entry.source.value if entry.source else None,
         }
 
-    # source_details would come from the full detection run;
-    # when loading from JSON we don't have the result objects,
-    # so pass empty details (causes default to metadata-based categorisation)
-    source_details: dict = {}
+    # Per-document evidence saved by run_detection.py alongside the results.
+    det_path = Path(args.detection)
+    details_path = det_path.with_name(f"{det_path.stem}_details.json")
+    if details_path.exists():
+        source_details = json.loads(details_path.read_text(encoding="utf-8"))
+    else:
+        logger.warning(f"No evidence file at {details_path}; FN causes will be 'unexplained'")
+        source_details = {}
 
     error_analysis = analyze_false_negatives(
         detection_results, gt, source_details, metadata, args.arm,

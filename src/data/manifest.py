@@ -11,6 +11,8 @@ from dataclasses import dataclass, asdict, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+
+from src.utils.config import to_relative, resolve_path
 from typing import Optional
 
 from src.utils.config import MANIFEST_DIR
@@ -169,7 +171,7 @@ class DataManifest:
         verified, mismatched, missing = [], [], []
 
         for doc_id, entry in self.entries.items():
-            path = Path(entry.file_path)
+            path = resolve_path(entry.file_path)
             if not path.exists():
                 missing.append(doc_id)
                 continue
@@ -261,4 +263,5 @@ class DataManifest:
         d = asdict(entry)
         d["source"] = entry.source.value
         d["ground_truth"] = entry.ground_truth.value
+        d["file_path"] = to_relative(entry.file_path)
         return d

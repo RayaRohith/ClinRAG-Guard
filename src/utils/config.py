@@ -68,6 +68,25 @@ CONFIDENCE_LEVEL = 0.95    # for Wilson score intervals
 RANDOM_SEED = 42           # reproducibility
 
 # ── Ensure directories exist ──────────────────────────────────
+def to_relative(path) -> str:
+    """Store paths relative to the project root (POSIX style) so manifests are portable."""
+    if not path:
+        return ""
+    p = Path(path)
+    if not p.is_absolute():
+        return p.as_posix()
+    try:
+        return p.resolve().relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return p.as_posix()
+
+
+def resolve_path(path) -> Path:
+    """Turn a stored (possibly relative) path back into an absolute one."""
+    p = Path(path)
+    return p if p.is_absolute() else PROJECT_ROOT / p
+
+
 def ensure_dirs():
     """Create all data/results directories if they don't exist."""
     for d in [

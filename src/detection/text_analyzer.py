@@ -15,6 +15,8 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from src.utils.config import to_relative, resolve_path
+
 from src.data.manifest import DataManifest, ManifestEntry, DocumentSource
 
 logger = logging.getLogger(__name__)
@@ -129,7 +131,7 @@ class TextAnalyzer:
 
         results = []
         for doc_id, entry in manifest.entries.items():
-            path = Path(entry.file_path)
+            path = resolve_path(entry.file_path)
             if not path.exists():
                 logger.warning(f"File not found: {doc_id} -> {path}")
                 results.append(TextAnalysisResult(doc_id=doc_id, flagged=False))

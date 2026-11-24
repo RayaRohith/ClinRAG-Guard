@@ -147,7 +147,22 @@ def save_detection_results(results: dict, arm: int) -> Path:
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results["detection_results"], f, indent=2)
 
-    logger.info(f"Detection results saved to {out_path}")
+    # Per-document evidence (gap in days, versions compared, errors) so the
+    # error analysis can cite the actual reason for every miss.
+    def _as_dict(r):
+        if isinstance(r, dict):
+            return r
+        return vars(r) if hasattr(r, "__dict__") else str(r)
+
+    details = {
+        source: {doc_id: _as_dict(r) for doc_id, r in per_doc.items()}
+        for source, per_doc in results.get("source_details", {}).items()
+    }
+    details_path = EVALUATION_RESULTS_DIR / f"detection_arm{arm}_details.json"
+    with open(details_path, "w", encoding="utf-8") as f:
+        json.dump(details, f, indent=2, default=str)
+
+    logger.info(f"Detection results saved to {out_path} (evidence: {details_path.name})")
     return out_path
 
 

@@ -11,6 +11,8 @@ import hashlib
 import logging
 import re
 from pathlib import Path
+
+from src.utils.config import to_relative, resolve_path
 from typing import Optional
 from xml.etree import ElementTree as ET
 
@@ -135,7 +137,7 @@ class IndexingPipeline:
         docs_skipped = 0
 
         for entry in entries:
-            path = Path(entry.file_path)
+            path = resolve_path(entry.file_path)
             if not path.exists():
                 logger.warning(f"File not found, skipping: {entry.doc_id} -> {path}")
                 docs_skipped += 1
