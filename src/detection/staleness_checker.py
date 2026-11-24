@@ -52,6 +52,7 @@ class StalenessChecker:
         self._last_request_time = 0.0
         self._version_collector = DailyMedVersionCollector(output_dir=str(DAILYMED_DIR))
         self._history_cache: dict[str, list[dict]] = {}
+        self._live_cache: dict[str, Optional[Path]] = {}
 
         # Load pair mappings for text_diff (older -> newer path)
         self._pair_map: dict[str, tuple[str, str]] = {}
@@ -199,66 +200,58 @@ class StalenessChecker:
 
     # ── Source (c): Text diff against current version ─────────
 
+    def _get_live_label(self, set_id: str) -> Optional[Path]:
+        """
+        Download the label DailyMed currently serves for this set_id, once per
+        run. Saved to data/dailymed/live_snapshot/ so every comparison can be
+        audited later.
+        """
+        if set_id in self._live_cache:
+            return self._live_cache[set_id]
+        snap_dir = DAILYMED_DIR / "live_snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+        fetcher = DailyMedVersionCollector(output_dir=str(snap_dir))
+        path = fetcher.download_current_xml(set_id, f"{set_id}_live")
+        self._live_cache[set_id] = path
+        return path
+
     def check_text_diff(self, doc_id: str, set_id: str, indexed_xml_path: str) -> StalenessResult:
         """
-        Compare indexed document to its paired newer version (from local files).
+        Compare the indexed label with the label DailyMed serves today.
 
-        For OUTDATED documents (doc_id ends with "-older"):
-          - Compare to the paired NEWER document we collected
-        For CURRENT documents (doc_id ends with "-newer"):
-          - Return flagged=False (already current, nothing to compare against)
+        This mirrors what a real ingestion-time check can do: it knows only the
+        document it indexed and its set ID. It never reads the doc_id, file name
+        or ground-truth label to decide.
         """
-        # Check if this is a CURRENT document (ends with "-newer")
-        if doc_id.endswith("-newer"):
-            return StalenessResult(
-                doc_id=doc_id, set_id=set_id,
-                flagged=False,
-                method="text_diff",
-                detail="Current document, no comparison needed",
-            )
-
-        # Extract pair_id from doc_id (remove "-older" suffix)
-        pair_id = doc_id.replace("-older", "")
-
-        # Look up the paired newer document path
-        if pair_id not in self._pair_map:
+        indexed = Path(indexed_xml_path)
+        if not indexed.exists():
             return StalenessResult(
                 doc_id=doc_id, set_id=set_id, flagged=False,
                 method="text_diff",
-                error=f"Pair mapping not found for {pair_id}",
+                error=f"Indexed file not found: {indexed}",
             )
 
-        older_path_str, newer_path_str = self._pair_map[pair_id]
-        older_path = Path(older_path_str)
-        newer_path = Path(newer_path_str)
-
-        if not older_path.exists():
+        live = self._get_live_label(set_id)
+        if live is None:
             return StalenessResult(
                 doc_id=doc_id, set_id=set_id, flagged=False,
                 method="text_diff",
-                error=f"Older file not found: {older_path}",
+                error="Live label unavailable",
             )
-
-        if not newer_path.exists():
-            return StalenessResult(
-                doc_id=doc_id, set_id=set_id, flagged=False,
-                method="text_diff",
-                error=f"Newer file not found: {newer_path}",
-            )
-
-        # Compare older to newer (both from local files)
-        older_sections = self._version_collector.extract_sections(older_path)
-        newer_sections = self._version_collector.extract_sections(newer_path)
 
         changed, summary = self._version_collector.compare_versions(
-            older_sections, newer_sections
+            self._version_collector.extract_sections(indexed),
+            self._version_collector.extract_sections(live),
         )
+        live_ver, live_date = self._version_collector.read_spl_metadata(live)
 
         return StalenessResult(
             doc_id=doc_id, set_id=set_id,
             flagged=len(changed) > 0,
             method="text_diff",
-            detail=summary,
+            current_version=live_ver,
+            current_date=live_date,
+            detail=f"vs live v{live_ver} ({live_date}): {summary}",
         )
 
     # ── Corpus-level runners ──────────────────────────────────
