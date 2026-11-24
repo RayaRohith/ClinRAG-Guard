@@ -4,7 +4,8 @@ tell you what was missed; this module tells you why.
 
 Retraction FN categories: no_crossref_record, no_pubmed_update,
 no_text_signal, api_error, no_metadata.
-Staleness FN categories: no_text_signal, subtle_change, api_error.
+Staleness FN categories (from per-document evidence): within_date_threshold,
+below_similarity_threshold, version_not_newer, api_error, unexplained.
 """
 
 import json
@@ -152,11 +153,17 @@ def _categorise_cause(
     Returns (category, detail_string).
     """
     had_error = False
+    def _field(source, key):
+        d = source_details.get(source, {}).get(doc_id)
+        if d is None:
+            return None
+        return d.get(key) if isinstance(d, dict) else getattr(d, key, None)
+
     for source in missed_by:
-        detail = source_details.get(source, {}).get(doc_id)
-        if detail and hasattr(detail, "error") and detail.error:
+        err = _field(source, "error")
+        if err:
             had_error = True
-            return ("api_error", f"{source}: {detail.error}")
+            return ("api_error", f"{source}: {err}")
 
     if arm == 1:
         if "crossref" in " ".join(missed_by).lower():
@@ -183,9 +190,23 @@ def _categorise_cause(
         return ("multiple_gaps", f"Missed by: {', '.join(missed_by)}")
 
     elif arm == 2:
-        if all("text" in s.lower() for s in missed_by):
-            return ("no_text_signal", "Older label has no staleness indicators")
-        return ("subtle_change", "Change not detected by pattern matching")
+        # Combined sources inherit their causes from the base sources.
+        base = [s for s in missed_by if not s.startswith("combined")]
+        reasons = []
+        if "date_recency" in base:
+            reasons.append(("within_date_threshold",
+                            f"date_recency: {_field('date_recency', 'detail') or 'no detail'}"))
+        if "version_api" in base:
+            reasons.append(("version_not_newer",
+                            f"version_api: {_field('version_api', 'detail') or 'no detail'}"))
+        if "text_diff" in base:
+            reasons.append(("below_similarity_threshold",
+                            f"text_diff: {_field('text_diff', 'detail') or 'no detail'}"))
+        if len(reasons) == 1:
+            return reasons[0]
+        if reasons:
+            return ("multiple_gaps", "; ".join(r[1] for r in reasons))
+        return ("unexplained", f"Missed by: {', '.join(missed_by)}")
 
     return ("unknown", f"Missed by: {', '.join(missed_by)}")
 
