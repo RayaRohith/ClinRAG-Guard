@@ -41,201 +41,141 @@ plt.rcParams['legend.fontsize'] = 9
 sns.set_palette("husl")
 
 
+BASE_METHODS = ["version_api", "date_recency", "text_diff"]
+METHOD_LABELS = {
+    "version_api": "Version API",
+    "date_recency": "Date Recency",
+    "text_diff": "Text Diff",
+}
+
+
+def _normalise_metrics(raw: dict) -> dict:
+    """
+    Convert metrics_arm{N}.json (a list under "sources", each with nested
+    value/lower/upper) into {method: flat dict}. Fails loudly if the format
+    is not recognised, so an empty figure can never be produced silently.
+    """
+    out = {}
+    for src in raw.get("sources", []):
+        cm = src["confusion_matrix"]
+        out[src["source_name"]] = {
+            "precision": src["precision"]["value"],
+            "precision_lo": src["precision"]["lower"],
+            "precision_hi": src["precision"]["upper"],
+            "recall": src["recall"]["value"],
+            "recall_lo": src["recall"]["lower"],
+            "recall_hi": src["recall"]["upper"],
+            "f1": src["f1"],
+            "f1_lo": src["f1_lower"],
+            "f1_hi": src["f1_upper"],
+            "tp": cm["tp"], "fp": cm["fp"], "tn": cm["tn"], "fn": cm["fn"],
+        }
+    missing = [m for m in BASE_METHODS if m not in out]
+    if missing:
+        raise ValueError(f"Metrics file has no entry for {missing}; found {list(out)}")
+    return out
+
+
 def load_results(arm: int) -> dict:
-    """Load all evaluation results for an arm."""
-    base_path = EVALUATION_RESULTS_DIR
-
-    with open(base_path / f"metrics_arm{arm}.json", encoding="utf-8") as f:
-        metrics = json.load(f)
-
-    with open(base_path / f"overlap_arm{arm}.json", encoding="utf-8") as f:
-        overlap = json.load(f)
-
-    with open(base_path / f"error_analysis_arm{arm}.json", encoding="utf-8") as f:
-        error_analysis = json.load(f)
-
-    return {
-        "metrics": metrics,
-        "overlap": overlap,
-        "error_analysis": error_analysis,
-    }
+    """Load evaluation results and raw detection flags for an arm."""
+    base = EVALUATION_RESULTS_DIR
+    with open(base / f"metrics_arm{arm}.json", encoding="utf-8") as f:
+        metrics = _normalise_metrics(json.load(f))
+    with open(base / f"detection_arm{arm}.json", encoding="utf-8") as f:
+        detection = json.load(f)
+    return {"metrics": metrics, "detection": detection}
 
 
 def plot_metrics_comparison(metrics: dict, arm: int, out_dir: Path):
-    """
-    Figure 1: Bar chart comparing P/R/F1 across methods with confidence intervals.
-    """
-    # Filter to main methods (exclude combined for clarity)
-    methods = ["version_api", "text_diff", "date_recency"]
-    method_labels = {
-        "version_api": "Version API",
-        "text_diff": "Text Diff",
-        "date_recency": "Date Recency",
-    }
-
-    # Extract metrics
-    data = {
-        "Precision": [],
-        "Recall": [],
-        "F1": [],
-    }
-    errors = {
-        "Precision": [],
-        "Recall": [],
-        "F1": [],
-    }
-    labels = []
-
-    for method in methods:
-        if method not in metrics:
-            continue
-        m = metrics[method]
-        labels.append(method_labels[method])
-
-        for metric_name in ["precision", "recall", "f1"]:
-            value = m[metric_name]
-            ci_lower = m[f"{metric_name}_ci_lower"]
-            ci_upper = m[f"{metric_name}_ci_upper"]
-
-            # Store value and error (half of CI range)
-            data[metric_name.capitalize()].append(value)
-            error = (ci_upper - ci_lower) / 2
-            errors[metric_name.capitalize()].append(error)
-
-    # Create grouped bar chart
-    x = np.arange(len(labels))
+    """Figure 1: P/R/F1 per method with asymmetric 95% Wilson intervals."""
+    labels = [METHOD_LABELS[m] for m in BASE_METHODS]
+    x = np.arange(len(BASE_METHODS))
     width = 0.25
+    colors = ["#4C72B0", "#55A868", "#C44E52"]
 
     fig, ax = plt.subplots(figsize=(8, 5))
+    for i, (key, name, color) in enumerate(
+        zip(["precision", "recall", "f1"], ["Precision", "Recall", "F1"], colors)
+    ):
+        vals = [metrics[m][key] for m in BASE_METHODS]
+        # max(0, .) guards against floating-point noise (e.g. upper 0.9999999 vs 1.0)
+        lo = [max(0.0, metrics[m][key] - metrics[m][f"{key}_lo"]) for m in BASE_METHODS]
+        hi = [max(0.0, metrics[m][f"{key}_hi"] - metrics[m][key]) for m in BASE_METHODS]
+        bars = ax.bar(x + width * (i - 1), vals, width, label=name,
+                      yerr=[lo, hi], capsize=4, color=color, alpha=0.85)
+        for bar, v, h in zip(bars, vals, hi):
+            ax.text(bar.get_x() + bar.get_width() / 2, v + h + 0.015, f"{v:.2f}",
+                    ha="center", va="bottom", fontsize=8)
 
-    colors = ['#4C72B0', '#55A868', '#C44E52']
-    for i, (metric, color) in enumerate(zip(["Precision", "Recall", "F1"], colors)):
-        offset = width * (i - 1)
-        bars = ax.bar(
-            x + offset,
-            data[metric],
-            width,
-            label=metric,
-            yerr=errors[metric],
-            capsize=4,
-            color=color,
-            alpha=0.8,
-        )
-
-        # Add value labels on bars
-        for bar in bars:
-            height = bar.get_height()
-            if height > 0:
-                ax.text(
-                    bar.get_x() + bar.get_width() / 2,
-                    height + 0.02,
-                    f'{height:.2f}',
-                    ha='center',
-                    va='bottom',
-                    fontsize=8,
-                )
-
-    ax.set_xlabel('Detection Method')
-    ax.set_ylabel('Score')
-    ax.set_title(f'Detection Performance Comparison (Arm {arm})')
+    ax.set_xlabel("Detection method")
+    ax.set_ylabel("Score")
+    n_pos = metrics[BASE_METHODS[0]]["tp"] + metrics[BASE_METHODS[0]]["fn"]
+    ax.set_title(f"Staleness detection performance (Arm {arm}, {n_pos} outdated labels)\n"
+                 "Error bars: 95% Wilson score intervals")
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.legend()
+    ax.legend(loc="lower left")
     ax.set_ylim(0, 1.15)
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     out_path = out_dir / f"fig1_metrics_comparison_arm{arm}.png"
-    plt.savefig(out_path, bbox_inches='tight')
+    plt.savefig(out_path, bbox_inches="tight")
     plt.close()
     logger.info(f"Saved {out_path}")
 
 
 def plot_confusion_matrices(metrics: dict, arm: int, out_dir: Path):
-    """
-    Figure 2: Confusion matrices for each detection method.
-    """
-    methods = ["version_api", "text_diff"]
-    method_labels = {
-        "version_api": "Version API",
-        "text_diff": "Text Diff",
-    }
-
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-
-    for idx, method in enumerate(methods):
-        if method not in metrics:
-            continue
-
+    """Figure 2: one confusion matrix per base detection method."""
+    fig, axes = plt.subplots(1, len(BASE_METHODS), figsize=(14, 4))
+    for ax, method in zip(axes, BASE_METHODS):
         m = metrics[method]
-        tp = m["true_positives"]
-        fp = m["false_positives"]
-        tn = m["true_negatives"]
-        fn = m["false_negatives"]
-
-        cm = np.array([[tn, fp], [fn, tp]])
-
-        ax = axes[idx]
+        cm = np.array([[m["tn"], m["fp"]], [m["fn"], m["tp"]]])
         sns.heatmap(
-            cm,
-            annot=True,
-            fmt='d',
-            cmap='Blues',
-            cbar=True,
-            ax=ax,
-            xticklabels=['Predicted\nNegative', 'Predicted\nPositive'],
-            yticklabels=['Actual\nNegative', 'Actual\nPositive'],
-            square=True,
-            linewidths=1,
-            linecolor='black',
+            cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax,
+            xticklabels=["Predicted\ncurrent", "Predicted\noutdated"],
+            yticklabels=["Actually\ncurrent", "Actually\noutdated"],
+            square=True, linewidths=1, linecolor="black",
         )
-        ax.set_title(f'{method_labels[method]}\nP={m["precision"]:.2f} R={m["recall"]:.2f}')
+        ax.set_title(f"{METHOD_LABELS[method]}\nP={m['precision']:.2f}  R={m['recall']:.2f}")
 
     plt.tight_layout()
     out_path = out_dir / f"fig2_confusion_matrices_arm{arm}.png"
-    plt.savefig(out_path, bbox_inches='tight')
+    plt.savefig(out_path, bbox_inches="tight")
     plt.close()
     logger.info(f"Saved {out_path}")
 
 
-def plot_venn_overlap(overlap: dict, arm: int, out_dir: Path):
+def plot_source_overlap(detection: dict, arm: int, out_dir: Path):
     """
-    Figure 3: Venn diagram showing which documents were flagged by which methods.
+    Figure 3: exact combinations of methods that flagged each document,
+    computed from raw flags. A bar chart replaces the Venn diagram, which is
+    unreadable when one method's flags are a subset of another's.
     """
-    # Get counts from overlap data
-    version_api_count = overlap["source_counts"]["version_api"]
-    text_diff_count = overlap["source_counts"]["text_diff"]
-    both_count = overlap["pairwise_overlap"]["text_diff+version_api"]
+    from collections import Counter
 
-    # Calculate unique counts (only flagged by one method)
-    version_api_only = version_api_count - both_count
-    text_diff_only = text_diff_count - both_count
+    docs = detection[BASE_METHODS[0]].keys()
+    combos = Counter()
+    for doc in docs:
+        hit = tuple(METHOD_LABELS[m] for m in BASE_METHODS if detection[m].get(doc))
+        if hit:
+            combos[" + ".join(hit)] += 1
+    items = sorted(combos.items(), key=lambda kv: kv[1])
 
-    fig, ax = plt.subplots(figsize=(8, 6))
-
-    # 2-circle Venn (skip date_recency as it flagged nothing)
-    venn = venn2(
-        subsets=(version_api_only, text_diff_only, both_count),
-        set_labels=('Version API', 'Text Diff'),
-        ax=ax,
-    )
-
-    # Style the diagram
-    if venn.get_patch_by_id('10'):
-        venn.get_patch_by_id('10').set_color('#4C72B0')
-        venn.get_patch_by_id('10').set_alpha(0.5)
-    if venn.get_patch_by_id('01'):
-        venn.get_patch_by_id('01').set_color('#55A868')
-        venn.get_patch_by_id('01').set_alpha(0.5)
-    if venn.get_patch_by_id('11'):
-        venn.get_patch_by_id('11').set_color('#8172B2')
-        venn.get_patch_by_id('11').set_alpha(0.5)
-
-    ax.set_title(f'Detection Source Overlap (Arm {arm})\nTotal Documents: {overlap["total_documents"]}')
+    fig, ax = plt.subplots(figsize=(8, 3.5))
+    bars = ax.barh([k for k, _ in items], [v for _, v in items], color="#4C72B0", alpha=0.85)
+    for bar, (_, v) in zip(bars, items):
+        ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height() / 2, str(v),
+                va="center", fontsize=9)
+    ax.set_xlabel("Documents flagged")
+    ax.set_title(f"Which methods flagged each document (Arm {arm}, "
+                 f"{len(docs)} documents; {len(docs) - sum(combos.values())} flagged by none)")
+    ax.set_xlim(0, max(combos.values()) * 1.15)
+    ax.grid(axis="x", alpha=0.3)
 
     plt.tight_layout()
-    out_path = out_dir / f"fig3_venn_overlap_arm{arm}.png"
-    plt.savefig(out_path, bbox_inches='tight')
+    out_path = out_dir / f"fig3_source_overlap_arm{arm}.png"
+    plt.savefig(out_path, bbox_inches="tight")
     plt.close()
     logger.info(f"Saved {out_path}")
 
@@ -325,7 +265,7 @@ def main():
     # Generate figures
     plot_metrics_comparison(results["metrics"], args.arm, out_dir)
     plot_confusion_matrices(results["metrics"], args.arm, out_dir)
-    plot_venn_overlap(results["overlap"], args.arm, out_dir)
+    plot_source_overlap(results["detection"], args.arm, out_dir)
     plot_change_distribution(args.arm, out_dir)
 
     logger.info(f"All figures saved to {out_dir}")
