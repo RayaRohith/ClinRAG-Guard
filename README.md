@@ -127,6 +127,6 @@ ClinRAG-Guard/
 
 The Retraction Watch database cannot be redistributed — we store only IDs, DOIs, and PubMed IDs. Users must obtain the database independently. Europe PMC articles are open-access CC BY; we archive the downloaded XML with SHA-256 hashes. DailyMed labels are US NLM public data, freely available.
 
-## Licence
+Development used AI coding assistance (Claude). The research design, contamination scenarios, evaluation methodology, analysis and interpretation are my own.
 
-[TBD]
+
