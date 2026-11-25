@@ -6,9 +6,7 @@ Follows the Datasheets for Datasets framework (Gebru et al., 2021).
 
 **Purpose:** We built this corpus to have a controlled test bed for measuring how well automated checks detect retracted papers and outdated drug labels sitting in a clinical retrieval system. There was no existing benchmark for this.
 
-**Creators:** [Your name and affiliation]
-
-**Funding:** [TBD]
+**Creators:** [Rohith]
 
 ## Composition
 
